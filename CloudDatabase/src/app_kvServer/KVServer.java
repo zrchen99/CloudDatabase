@@ -1,5 +1,15 @@
 package app_kvServer;
 
+import java.net.BindException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.IOException;
+
+import logger.LogSetup;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 public class KVServer implements IKVServer {
 	/**
 	 * Start KV Server at given port
@@ -11,14 +21,27 @@ public class KVServer implements IKVServer {
 	 *           currently not contained in the cache. Options are "FIFO", "LRU",
 	 *           and "LFU".
 	 */
+
+	private static Logger logger = Logger.getRootLogger();
+	
+	private int port;
+	private int cacheSize;
+    private ServerSocket serverSocket;
+    private boolean running;
+	private String strategy;
+
 	public KVServer(int port, int cacheSize, String strategy) {
-		// TODO Auto-generated method stub
+		// Instantiates the server
+		this.port = port;
+		this.cacheSize = cacheSize;
+		this.strategy = strategy;
+
 	}
 	
 	@Override
 	public int getPort(){
 		// TODO Auto-generated method stub
-		return -1;
+		return this.port;
 	}
 
 	@Override
@@ -30,13 +53,22 @@ public class KVServer implements IKVServer {
 	@Override
     public CacheStrategy getCacheStrategy(){
 		// TODO Auto-generated method stub
-		return IKVServer.CacheStrategy.None;
+		switch(this.strategy){
+			case "LRU" :
+				return IKVServer.CacheStrategy.LRU;
+			case "LFU" :
+				return IKVServer.CacheStrategy.LFU;
+			case "FIFO" :
+				return IKVServer.CacheStrategy.FIFO;
+			default:
+				return IKVServer.CacheStrategy.None;
+		}
 	}
 
 	@Override
     public int getCacheSize(){
 		// TODO Auto-generated method stub
-		return -1;
+		return this.cacheSize;
 	}
 
 	@Override
