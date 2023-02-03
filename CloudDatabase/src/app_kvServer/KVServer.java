@@ -27,6 +27,7 @@ public class KVServer implements IKVServer {
 	private int port;
 	private int cacheSize;
     private ServerSocket serverSocket;
+	private Socket client;
     private boolean running;
 	private String strategy;
 
@@ -47,7 +48,7 @@ public class KVServer implements IKVServer {
 	@Override
     public String getHostname(){
 		// TODO Auto-generated method stub
-		return null;
+		return serverSocket.getInetAddress().getHostName();
 	}
 
 	@Override
